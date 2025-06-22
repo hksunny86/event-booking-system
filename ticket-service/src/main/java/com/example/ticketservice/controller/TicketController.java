@@ -39,57 +39,28 @@ public class TicketController {
     @Operation(summary = "Book a ticket")
     @CircuitBreaker(name = TICKET_SERVICE, fallbackMethod = "bookTicketFallback")
     public ResponseEntity<?> bookTicket(@RequestBody BookTicketRequest request) {
-        try {
-            // 1. Call Event Service
-            String eventUrl = eventServiceUrl + "/events/" + request.getEventId();
-            EventResponse event = restTemplate.getForObject(eventUrl, EventResponse.class);
+        log.info("Received booking request for eventId={}, user={}", request.getEventId(), request.getUserName());
 
+        try {
+            EventResponse event = fetchEventDetails(request.getEventId());
             if (event == null) {
                 return ResponseEntity.status(502).body("Event Service unavailable or returned null");
             }
 
             if (event.getAvailableTickets() < request.getQuantity()) {
+                log.warn("Insufficient tickets for eventId={}, requested={}, available={}",
+                        event.getId(), request.getQuantity(), event.getAvailableTickets());
                 return ResponseEntity.badRequest().body("Not enough tickets available");
             }
 
-            // 2. Save ticket
-            Ticket ticket = Ticket.builder()
-                    .eventId(event.getId())
-                    .eventName(event.getName())
-                    .eventDate(event.getDate().toString())
-                    .eventLocation(event.getLocation())
-                    .userName(request.getUserName())
-                    .ticketType(request.getTicketType())
-                    .quantity(request.getQuantity())
-                    .paymentAmount(request.getPaymentAmount())
-                    .bookingTime(LocalDateTime.now())
-                    .status("BOOKED")
-                    .build();
-            ticket = ticketRepository.save(ticket);
-
-            // 3. Notify user
-            NotificationRequest notify = NotificationRequest.builder()
-                    .eventName(event.getName())
-                    .eventDate(event.getDate().toString())
-                    .eventLocation(event.getLocation())
-                    .userName(ticket.getUserName())
-                    .ticketType(ticket.getTicketType())
-                    .numberOfTickets(ticket.getQuantity())
-                    .paymentAmount(ticket.getPaymentAmount().toString())
-                    .type("CONFIRMATION")
-                    .build();
-
-            try {
-                restTemplate.postForObject(notificationServiceUrl + "/notifications/send", notify, String.class);
-            } catch (RestClientException e) {
-                log.error("Failed to notify user after booking. Reason: {}", e.getMessage());
-            }
+            Ticket ticket = saveBookedTicket(request, event);
+            sendNotification(ticket, "CONFIRMATION");
 
             return ResponseEntity.ok(ticket);
 
         } catch (Exception e) {
-            log.error("Unexpected error occurred while booking ticket", e);
-            return ResponseEntity.internalServerError().body("Error occurred while booking ticket");
+            log.error("Booking failed for eventId={}, error={}", request.getEventId(), e.getMessage(), e);
+            return ResponseEntity.internalServerError().body("An error occurred while booking the ticket.");
         }
     }
 
@@ -97,15 +68,54 @@ public class TicketController {
     @Operation(summary = "Cancel a booked ticket")
     @CircuitBreaker(name = TICKET_SERVICE, fallbackMethod = "cancelTicketFallback")
     public ResponseEntity<?> cancelTicket(@PathVariable Long id) {
+        log.info("Received cancellation request for ticketId={}", id);
+
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            log.warn("Ticket not found for cancellation: ticketId={}", id);
+            return ResponseEntity.status(404).body("Ticket not found");
         }
 
         Ticket ticket = optionalTicket.get();
         ticket.setStatus("CANCELLED");
         ticket = ticketRepository.save(ticket);
+        log.info("Ticket cancelled successfully: ticketId={}", ticket.getId());
 
+        sendNotification(ticket, "CANCELLATION");
+        return ResponseEntity.ok(ticket);
+    }
+
+    // === Utility Methods ===
+
+    private EventResponse fetchEventDetails(Long eventId) {
+        try {
+            String url = eventServiceUrl + "/events/" + eventId;
+            return restTemplate.getForObject(url, EventResponse.class);
+        } catch (RestClientException ex) {
+            log.error("Failed to fetch event details for eventId={}: {}", eventId, ex.getMessage());
+            return null;
+        }
+    }
+
+    private Ticket saveBookedTicket(BookTicketRequest request, EventResponse event) {
+        Ticket ticket = Ticket.builder()
+                .eventId(event.getId())
+                .eventName(event.getName())
+                .eventDate(event.getDate().toString())
+                .eventLocation(event.getLocation())
+                .userName(request.getUserName())
+                .ticketType(request.getTicketType())
+                .quantity(request.getQuantity())
+                .paymentAmount(request.getPaymentAmount())
+                .bookingTime(LocalDateTime.now())
+                .status("BOOKED")
+                .build();
+        ticket = ticketRepository.save(ticket);
+        log.info("Ticket booked: ticketId={}, eventId={}", ticket.getId(), event.getId());
+        return ticket;
+    }
+
+    private void sendNotification(Ticket ticket, String type) {
         NotificationRequest notify = NotificationRequest.builder()
                 .eventName(ticket.getEventName())
                 .eventDate(ticket.getEventDate())
@@ -114,26 +124,26 @@ public class TicketController {
                 .ticketType(ticket.getTicketType())
                 .numberOfTickets(ticket.getQuantity())
                 .paymentAmount(ticket.getPaymentAmount().toString())
-                .type("CANCELLATION")
+                .type(type)
                 .build();
 
         try {
             restTemplate.postForObject(notificationServiceUrl + "/notifications/send", notify, String.class);
+            log.info("{} notification sent for ticketId={}", type, ticket.getId());
         } catch (RestClientException e) {
-            log.error("Failed to notify user after cancellation. Reason: {}", e.getMessage());
+            log.error("Failed to send {} notification for ticketId={}: {}", type, ticket.getId(), e.getMessage());
         }
-
-        return ResponseEntity.ok(ticket);
     }
 
-    //Fallbacks
+    // === Fallback Methods ===
+
     public ResponseEntity<?> bookTicketFallback(BookTicketRequest request, Throwable ex) {
-        log.error("Book Ticket fallback triggered: {}", ex.getMessage());
-        return ResponseEntity.status(503).body("Service temporarily unavailable, please try again later.");
+        log.error("Fallback triggered: Book ticket for eventId={} failed: {}", request.getEventId(), ex.getMessage());
+        return ResponseEntity.status(503).body("Ticket booking service is temporarily unavailable.");
     }
 
     public ResponseEntity<?> cancelTicketFallback(Long id, Throwable ex) {
-        log.error("Cancel Ticket fallback triggered: {}", ex.getMessage());
-        return ResponseEntity.status(503).body("Service temporarily unavailable, please try again later.");
+        log.error("Fallback triggered: Cancel ticket for ticketId={} failed: {}", id, ex.getMessage());
+        return ResponseEntity.status(503).body("Ticket cancellation service is temporarily unavailable.");
     }
 }

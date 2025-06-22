@@ -14,8 +14,8 @@ import java.util.Optional;
 public class EventService {
     private final EventRepository repository;
 
-    public void createEvent(Event event) {
-        repository.save(event);
+    public Event createEvent(Event event) {
+        return repository.save(event);
     }
 
     public List<Event> findAll() {
