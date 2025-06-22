@@ -66,12 +66,12 @@ Each service is independent, runs on its own port, and communicates via **REST A
 1. **Start Services (via below command):**
 
    ```bash
-cd event-service
-mvn spring-boot:run
+   cd event-service
+   mvn spring-boot:run
 
-cd ticket-service
-mvn spring-boot:run
+   cd ticket-service
+   mvn spring-boot:run
 
-cd notification-service
-mvn spring-boot:run
+   cd notification-service
+   mvn spring-boot:run
 
