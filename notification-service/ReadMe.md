@@ -1,6 +1,3 @@
-/* Notification Service - Spring Boot (notification-service) */
-
-// README.md
 # Notification Service
 
 This service logs and simulates sending notifications for ticket bookings and cancellations.
