@@ -1,6 +1,3 @@
-/* Ticket Service - Spring Boot (ticket-service) */
-
-// README.md
 # Ticket Service
 
 This service handles ticket booking and cancellation for events, and communicates with:
