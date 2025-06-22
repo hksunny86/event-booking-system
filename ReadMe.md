@@ -57,24 +57,21 @@ Each service is independent, runs on its own port, and communicates via **REST A
 
 - Java 17+
 - Apache Maven
-- Docker (for Kafka)
 - IntelliJ IDEA or any Spring Boot-compatible IDE
 
 ---
 
 ## 🚀 Running the Services
 
-1. **Start Kafka (via Docker):**
+1. **Start Services (via below command):**
 
    ```bash
 cd event-service
 mvn spring-boot:run
 
-```bash
 cd ticket-service
 mvn spring-boot:run
 
-```bash
 cd notification-service
 mvn spring-boot:run
 
