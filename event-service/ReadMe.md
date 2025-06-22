@@ -1,6 +1,3 @@
-/* Event Service - Spring Boot (event-service) */
-
-// README.md
 # Event Service
 
 This service manages the creation, retrieval, updating, and deletion of events.
