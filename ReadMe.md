@@ -67,4 +67,14 @@ Each service is independent, runs on its own port, and communicates via **REST A
 1. **Start Kafka (via Docker):**
 
    ```bash
-   docker-compose up -d
+cd event-service
+mvn spring-boot:run
+
+```bash
+cd ticket-service
+mvn spring-boot:run
+
+```bash
+cd notification-service
+mvn spring-boot:run
+
