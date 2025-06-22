@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class BookTicketRequest {
     private Long eventId;
     private String userName;

@@ -83,7 +83,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2023.0.1</version> <!-- Match your Spring Boot version -->
+                <version>2025.0.0</version> <!-- Match your Spring Boot version -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
