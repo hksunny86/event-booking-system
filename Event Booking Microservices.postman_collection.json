@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "eccf92a3-7705-482a-bc6e-a8cab794a4df",
+		"name": "Event Booking Microservices",
+		"description": "Collection to test Event, Ticket, and Notification microservices.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Dj Night\",\n  \"date\": \"2025-07-10\",\n  \"location\": \"Dolmen Mall\",\n  \"availableTickets\": 100,\n  \"price\": 1500.00\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Event",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dj Night\",\n  \"date\": \"2025-07-10\",\n  \"location\": \"Dolmen Mall\",\n  \"availableTickets\": 100,\n  \"price\": 1500.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "26"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:33:01 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "Event Created Successfully"
+				}
+			]
+		},
+		{
+			"name": "Get All Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get All Events",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 11:11:05 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Dj Night\",\n        \"date\": \"2025-07-10\",\n        \"location\": \"Dolmen Mall\",\n        \"availableTickets\": 100,\n        \"price\": 1500\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Book Ticket",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"eventId\": 1,\n  \"userName\": \"Hamza Khalid\",\n  \"ticketType\": \"VIP\",\n  \"quantity\": 2,\n  \"paymentAmount\": 3000.00\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/tickets/book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"tickets",
+						"book"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Book Ticket",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"eventId\": 1,\n  \"userName\": \"Hamza Khalid\",\n  \"ticketType\": \"VIP\",\n  \"quantity\": 2,\n  \"paymentAmount\": 3000.00\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/tickets/book",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tickets",
+								"book"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:33:41 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"eventId\": 1,\n    \"eventName\": \"Dj Night\",\n    \"eventDate\": \"2025-07-10\",\n    \"eventLocation\": \"Dolmen Mall\",\n    \"userName\": \"Hamza Khalid\",\n    \"ticketType\": \"VIP\",\n    \"quantity\": 2,\n    \"paymentAmount\": 3000,\n    \"status\": \"BOOKED\",\n    \"bookingTime\": \"2025-06-21T02:33:40.7967821\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Cancel Ticket",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/tickets/cancel/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"tickets",
+						"cancel",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Cancel Ticket",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/tickets/cancel/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tickets",
+								"cancel",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:35:18 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"eventId\": 1,\n    \"eventName\": \"Dj Night\",\n    \"eventDate\": \"2025-07-10\",\n    \"eventLocation\": \"Dolmen Mall\",\n    \"userName\": \"Hamza Khalid\",\n    \"ticketType\": \"VIP\",\n    \"quantity\": 2,\n    \"paymentAmount\": 3000,\n    \"status\": \"CANCELLED\",\n    \"bookingTime\": \"2025-06-21T02:33:40.796782\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Send Notification (manual test)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"eventName\": \"Concert Night\",\n  \"eventDate\": \"2025-07-10\",\n  \"eventLocation\": \"Lahore Expo Center\",\n  \"userName\": \"Hamza\",\n  \"ticketType\": \"VIP\",\n  \"numberOfTickets\": 2,\n  \"paymentAmount\": \"3000.00\",\n  \"type\": \"CONFIRMATION\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/notifications/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"notifications",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Send Notification (manual test)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"eventName\": \"Concert Night\",\n  \"eventDate\": \"2025-07-10\",\n  \"eventLocation\": \"Lahore Expo Center\",\n  \"userName\": \"Hamza\",\n  \"ticketType\": \"VIP\",\n  \"numberOfTickets\": 2,\n  \"paymentAmount\": \"3000.00\",\n  \"type\": \"CONFIRMATION\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/notifications/send",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"notifications",
+								"send"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "31"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 21:35:00 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "Notification sent successfully."
+				}
+			]
+		}
+	]
+}
