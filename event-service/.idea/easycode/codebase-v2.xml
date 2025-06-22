@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/src/main/java/com/example/eventservice/controller/EventController.java;D:/AIS/integrations/event-service/src/main/java/com/example/eventservice/entity/Event.java;D:/AIS/integrations/event-service/src/main/java/com/example/eventservice/repository/EventRepository.java;D:/AIS/integrations/event-service/src/main/java/com/example/eventservice/EventServiceApplication.java;D:/AIS/integrations/event-service/src/test/java/com/example/eventservice/EventServiceApplicationTests.java" />
+  </component>
+</project>

@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: ticket-service
+  datasource:
+    url: jdbc:h2:mem:ticketdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    consumer:
+#      group-id: notification-group
+#      auto-offset-reset: earliest
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+server:
+  port: 8081
+
+# External Service URLs (can override via ENV vars or args)
+event:
+  service:
+    url: http://localhost:8080
+notification:
+  service:
+    url: http://localhost:8082
+resilience4j:
+  circuitbreaker:
+    instances:
+      ticketServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
