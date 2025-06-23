@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
@@ -44,7 +46,7 @@ public class TicketController {
         try {
             EventResponse event = fetchEventDetails(request.getEventId());
             if (event == null) {
-                return ResponseEntity.status(502).body("Event Service unavailable or returned null");
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Event Service unavailable or returned null");
             }
 
             if (event.getAvailableTickets() < request.getQuantity()) {
@@ -73,7 +75,7 @@ public class TicketController {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isEmpty()) {
             log.warn("Ticket not found for cancellation: ticketId={}", id);
-            return ResponseEntity.status(404).body("Ticket not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ticket not found");
         }
 
         Ticket ticket = optionalTicket.get();
@@ -139,11 +141,11 @@ public class TicketController {
 
     public ResponseEntity<?> bookTicketFallback(BookTicketRequest request, Throwable ex) {
         log.error("Fallback triggered: Book ticket for eventId={} failed: {}", request.getEventId(), ex.getMessage());
-        return ResponseEntity.status(503).body("Ticket booking service is temporarily unavailable.");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Ticket booking service is temporarily unavailable.");
     }
 
     public ResponseEntity<?> cancelTicketFallback(Long id, Throwable ex) {
         log.error("Fallback triggered: Cancel ticket for ticketId={} failed: {}", id, ex.getMessage());
-        return ResponseEntity.status(503).body("Ticket cancellation service is temporarily unavailable.");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Ticket cancellation service is temporarily unavailable.");
     }
 }

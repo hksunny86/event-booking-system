@@ -1,5 +1,6 @@
 package com.example.eventservice.controller;
 
+import com.example.eventservice.dto.EventRequest;
 import com.example.eventservice.entity.Event;
 import com.example.eventservice.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,7 @@ public class EventController {
 
     @PostMapping
     @Operation(summary = "Create a new event")
-    public ResponseEntity<String> createEvent(@RequestBody Event event) {
+    public ResponseEntity<String> createEvent(@RequestBody EventRequest event) {
         Event savedEvent = eventService.createEvent(event);
         log.info("Event created successfully: ID={}, Name={}", savedEvent.getId(), savedEvent.getName());
         return ResponseEntity
@@ -58,7 +59,7 @@ public class EventController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an event")
-    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails) {
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventRequest eventDetails) {
         Optional<Event> eventOpt = eventService.findById(id);
         if (eventOpt.isEmpty()) {
             log.warn("Event update failed - not found: ID={}", id);

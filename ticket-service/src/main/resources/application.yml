@@ -14,17 +14,6 @@ spring:
     console:
       enabled: false
       path: /h2-console
-#  kafka:
-#    bootstrap-servers: localhost:9092
-#    consumer:
-#      group-id: notification-group
-#      auto-offset-reset: earliest
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#    consumer:
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 server:
   port: 8081

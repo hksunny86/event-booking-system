@@ -1,5 +1,6 @@
 package com.example.eventservice.service;
 
+import com.example.eventservice.dto.EventRequest;
 import com.example.eventservice.entity.Event;
 import com.example.eventservice.exception.EventNotFoundException;
 import com.example.eventservice.repository.EventRepository;
@@ -14,7 +15,13 @@ import java.util.Optional;
 public class EventService {
     private final EventRepository repository;
 
-    public Event createEvent(Event event) {
+    public Event createEvent(EventRequest request) {
+        Event event = new Event();
+        event.setName(request.getName());
+        event.setDate(request.getDate());
+        event.setLocation(request.getLocation());
+        event.setAvailableTickets(request.getAvailableTickets());
+        event.setPrice(request.getPrice());
         return repository.save(event);
     }
 

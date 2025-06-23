@@ -1,6 +1,7 @@
 package com.example.eventservice;
 
 import com.example.eventservice.controller.EventController;
+import com.example.eventservice.dto.EventRequest;
 import com.example.eventservice.entity.Event;
 import com.example.eventservice.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +40,7 @@ class EventServiceTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(event)))
                 .andExpect(status().isOk());
-        verify(eventService).createEvent(any(Event.class));
+        verify(eventService).createEvent(any(EventRequest.class));
     }
 
     @Test
